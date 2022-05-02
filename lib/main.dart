@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<Dog>(
       create: (context) => dog04,
       child: MaterialApp(
-        title: 'Provider 04',
+        title: 'Provider 04 master',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Provider 04'),
+        title: const Text('Provider 04 master'),
       ),
       body: Center(
         child: Column(
