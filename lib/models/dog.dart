@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Dog {
   final String name;
   final String breed;
@@ -9,5 +11,9 @@ class Dog {
     this.age = 1,
   });
 
+  void grow() {
+    age++;
+    debugPrint(age.toString());
+  }
 
 }
