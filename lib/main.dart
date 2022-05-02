@@ -3,11 +3,9 @@ import 'package:provider/provider.dart';
 
 import 'models/dog.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -23,7 +21,6 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(),
     );
   }
-
 }
 
 class MyHomePage extends StatefulWidget {
@@ -45,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void dogListener() {
     debugPrint('age Listener(): ${dog.age}');
+    setState(() {});
   }
 
   @override
@@ -70,7 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
               style: const TextStyle(fontSize: 20.0),
             ),
             const SizedBox(height: 10.0),
-            BreedAndAge(dog: dog,),
+            BreedAndAge(
+              dog: dog,
+            ),
           ],
         ),
       ),
@@ -80,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class BreedAndAge extends StatelessWidget {
   final Dog dog;
+
   const BreedAndAge({Key? key, required this.dog}) : super(key: key);
 
   @override
@@ -99,6 +100,7 @@ class BreedAndAge extends StatelessWidget {
 
 class Age extends StatelessWidget {
   final Dog dog;
+
   const Age({Key? key, required this.dog}) : super(key: key);
 
   @override
