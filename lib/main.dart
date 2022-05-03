@@ -15,16 +15,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final Dog dog08 = Dog(name: 'dog08', breed: 'breed08', age: 3);
+  final Dog dog10 = Dog(name: 'dog10', breed: 'breed10', age: 3);
 
   @override
   Widget build(BuildContext context) {
     debugPrint('Myapp >> build');
 
     return ChangeNotifierProvider<Dog>(
-      create: (context) => dog08,
+      create: (context) => dog10,
       child: MaterialApp(
-        title: 'Provider 08 master',
+        title: 'Provider 10 master',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -49,10 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Provider 08 master'),
+        title: const Text('Provider 10 master'),
       ),
-      body: Consumer<Dog>(
-        builder: (context, Dog dog, Widget? child) {
+      body: Selector<Dog, String>(
+        selector: (context, Dog dog) => dog.name,
+        builder: (context, String name, Widget? child) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child!,
                 const SizedBox(height: 10.0),
                 Text(
-                  '- name: ${dog.name}',
+                  '- name: $name',
                   style: const TextStyle(fontSize: 20.0),
                 ),
                 const SizedBox(height: 10.0),
@@ -86,18 +87,21 @@ class BreedAndAge extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('BreedAndAge >> build');
 
-    return Consumer(builder: (_, Dog dog, __){
-      return Column(
-        children: [
-          Text(
-            '- breed: ${dog.breed}',
-            style: const TextStyle(fontSize: 20.0),
-          ),
-          const SizedBox(height: 10.0),
-          const Age(),
-        ],
-      );
-    });
+    return Selector<Dog, String>(
+      selector: (context, Dog dog) => dog.breed,
+      builder: (_, String breed, __) {
+        return Column(
+          children: [
+            Text(
+              '- breed: $breed',
+              style: const TextStyle(fontSize: 20.0),
+            ),
+            const SizedBox(height: 10.0),
+            const Age(),
+          ],
+        );
+      },
+    );
   }
 }
 
@@ -108,29 +112,32 @@ class Age extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('Age >> build');
 
-    return Consumer(builder: (_, Dog dog, __) {
-      return Column(
-        children: [
-          Text(
-            // "context.watch<Dog>()" 하면 context 를 사용하므로
-            // "debugPrint('Age >> build');" 출력함
-            // '- age: ${context.watch<Dog>().age}',
-            '- age: ${dog.age}',
-            style: const TextStyle(fontSize: 20.0),
-          ),
-          const SizedBox(height: 20.0),
-          ElevatedButton(
-            // "context.read<Dog>()" 하면 context 를 사용하므로
-            // "debugPrint('Age >> build');" 출력함
-            // onPressed: () => context.read<Dog>().grow(),
-            onPressed: () => dog.grow(),
-            child: const Text(
-              'Grow',
-              style: TextStyle(fontSize: 20.0),
+    return Selector<Dog, int>(
+      selector: (context, Dog dog) => dog.age,
+      builder: (_, int age, __) {
+        return Column(
+          children: [
+            Text(
+              // "context.watch<Dog>()" 하면 context 를 사용하므로
+              // "debugPrint('Age >> build');" 출력함
+              // '- age: ${context.watch<Dog>().age}',
+              '- age: $age',
+              style: const TextStyle(fontSize: 20.0),
             ),
-          ),
-        ],
-      );
-    });
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              // "context.read<Dog>()" 하면 context 를 사용하므로
+              // "debugPrint('Age >> build');" 출력함
+              // onPressed: () => context.read<Dog>().grow(),
+              onPressed: () => context.read<Dog>().grow(),
+              child: const Text(
+                'Grow',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
