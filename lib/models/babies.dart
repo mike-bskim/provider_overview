@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Babies {
   final int age;
 
@@ -24,6 +26,14 @@ class Babies {
       return 10;
     } else {
       return 12;
+    }
+  }
+
+  Stream<String> bark() async* {
+    for (int i = 1; i < age; i++) {
+      await Future.delayed(const Duration(seconds: 1));
+      debugPrint(DateTime.now().toString());
+      yield 'Bark $i times';
     }
   }
 }
