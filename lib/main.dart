@@ -1,25 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_overview/models/babies.dart';
 
 import 'models/dog.dart';
-
 
 void main() {
   runApp(const MyApp());
 }
 
-final Dog dog05 = Dog(name: 'dog05', breed: 'breed05', age: 3);
+final Dog dog = Dog(name: 'dog06', breed: 'breed06', age: 3);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    return ChangeNotifierProvider<Dog>(
-      create: (context) => dog05,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Dog>(
+          create: (context) => dog,
+        ),
+        // 타입이 같다면 나중에 호출된 값이 화면에 출력된다.
+        // 타입이 다르면 타입에 맞게 출력됨.
+        FutureProvider<int>(
+          create: (context) {
+            final int dogAge = context.read<Dog>().age;
+            final babies = Babies(age: dogAge);
+            return babies.getBabies();
+          },
+          initialData: 0,
+        ),
+        FutureProvider<double>(
+          create: (context) {
+            final int dogAge = context.read<Dog>().age;
+            final babies = Babies(age: dogAge);
+            return babies.getBabies2();
+          },
+          initialData: 0,
+        ),
+      ],
       child: MaterialApp(
-        title: 'Provider 05 master',
+        title: 'Provider 06 master',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -28,7 +49,6 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class MyHomePage extends StatefulWidget {
@@ -39,12 +59,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
+    debugPrint('_MyHomePageState >> build');
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Provider 05 master'),
+        title: const Text('Provider 06 master'),
       ),
       body: Center(
         child: Column(
@@ -69,6 +90,8 @@ class BreedAndAge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('BreedAndAge >> build');
+
     return Column(
       children: [
         Text(
@@ -87,10 +110,22 @@ class Age extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Age >> build');
+
     return Column(
       children: [
         Text(
           '- age: ${context.select<Dog, int>((Dog dog) => dog.age)}',
+          style: const TextStyle(fontSize: 20.0),
+        ),
+        const SizedBox(height: 10.0),
+        Text(
+          '- number of babies(int): ${context.watch<int>()}',
+          style: const TextStyle(fontSize: 20.0),
+        ),
+        const SizedBox(height: 20.0),
+        Text(
+          '- number of babies(double): ${context.watch<double>()}',
           style: const TextStyle(fontSize: 20.0),
         ),
         const SizedBox(height: 20.0),
