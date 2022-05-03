@@ -47,21 +47,23 @@ class MyHomePage extends StatelessWidget {
         create: (_) {
           return Foo();
         },
-        child: Builder(
-          builder: (context) {
+        child: Consumer(
+          builder: (context, Foo foo, Widget? _) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'value: ${context.watch<Foo>().value}',
+                    // 'value: ${context.watch<Foo>().value}',
+                    'value: ${foo.value}',
                     style: const TextStyle(fontSize: 40.0),
                   ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<Foo>().changeValue();
+                      // context.read<Foo>().changeValue();
+                      foo.changeValue();
                     },
                     child: const Text(
                       'Change value',
