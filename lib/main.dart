@@ -8,7 +8,7 @@ void main() {
   runApp(const MyApp());
 }
 
-final Dog dog04 = Dog(name: 'dog04', breed: 'breed04');
+final Dog dog05 = Dog(name: 'dog05', breed: 'breed05', age: 3);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return ChangeNotifierProvider<Dog>(
-      create: (context) => dog04,
+      create: (context) => dog05,
       child: MaterialApp(
-        title: 'Provider 04 master',
+        title: 'Provider 05 master',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Provider 04 master'),
+        title: const Text('Provider 05 master'),
       ),
       body: Center(
         child: Column(
@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              '- name: ${Provider.of<Dog>(context).name}',
+              '- name: ${context.read<Dog>().name}',
               style: const TextStyle(fontSize: 20.0),
             ),
             const SizedBox(height: 10.0),
@@ -72,7 +72,7 @@ class BreedAndAge extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '- breed: ${Provider.of<Dog>(context).breed}',
+          '- breed: ${context.select<Dog, String>((Dog dog) => dog.breed)}',
           style: const TextStyle(fontSize: 20.0),
         ),
         const SizedBox(height: 10.0),
@@ -90,12 +90,12 @@ class Age extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '- age: ${Provider.of<Dog>(context).age}',
+          '- age: ${context.select<Dog, int>((Dog dog) => dog.age)}',
           style: const TextStyle(fontSize: 20.0),
         ),
         const SizedBox(height: 20.0),
         ElevatedButton(
-          onPressed: () => Provider.of<Dog>(context, listen: false).grow(),
+          onPressed: () => context.read<Dog>().grow(),
           child: const Text(
             'Grow',
             style: TextStyle(fontSize: 20.0),
