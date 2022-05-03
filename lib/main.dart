@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_overview/models/counter.dart';
 
 import 'models/dog.dart';
 
@@ -43,38 +44,41 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Provider 09 master'),
       ),
-      body: ChangeNotifierProvider<Foo>(
-        create: (_) {
-          return Foo();
-        },
-        child: Consumer(
-          builder: (context, Foo foo, Widget? _) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    // 'value: ${context.watch<Foo>().value}',
-                    'value: ${foo.value}',
-                    style: const TextStyle(fontSize: 40.0),
-                  ),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      // context.read<Foo>().changeValue();
-                      foo.changeValue();
-                    },
-                    child: const Text(
-                      'Change value',
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-        ),
+      body: ChangeNotifierProvider<Counter>(
+        create: (_) => Counter(),
+        child: const ChildWidget(),
+      ),
+    );
+  }
+}
+
+class ChildWidget extends StatelessWidget {
+  const ChildWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'value: ${context.watch<Counter>().counter}',
+            style: const TextStyle(fontSize: 40.0),
+          ),
+          const SizedBox(height: 20.0),
+          ElevatedButton(
+            onPressed: () {
+              context.read<Counter>().increment();
+            },
+            child: const Text(
+              'Increment',
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ),
+        ],
       ),
     );
   }
