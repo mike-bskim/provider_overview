@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+class Counter with ChangeNotifier {
+  int counter = 0;
+
+  void increment() {
+    counter++;
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -31,14 +41,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int counter = 0;
-
-  void increment() {
-    setState(() {
-      counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     debugPrint('===================================');
@@ -48,26 +50,26 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('My Counter'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              color: Colors.blue[100],
-              padding: const EdgeInsets.all(20.0),
-              child: const Text(
-                'MyHomePage',
-                style: TextStyle(fontSize: 24.0),
+      body: ChangeNotifierProvider<Counter>(
+        create: (context) => Counter(),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                color: Colors.blue[100],
+                padding: const EdgeInsets.all(20.0),
+                child: const Text(
+                  'MyHomePage',
+                  style: TextStyle(fontSize: 24.0),
+                ),
               ),
-            ),
-            const SizedBox(height: 20.0),
-            CounterA(
-              counter: counter,
-              increment: increment,
-            ),
-            const SizedBox(height: 20.0),
-            Middle(counter: counter),
-          ],
+              const SizedBox(height: 20.0),
+              const CounterA(),
+              const SizedBox(height: 20.0),
+              const Middle(),
+            ],
+          ),
         ),
       ),
     );
@@ -75,13 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class CounterA extends StatelessWidget {
-  final int counter;
-  final void Function() increment;
-
   const CounterA({
     Key? key,
-    required this.counter,
-    required this.increment,
   }) : super(key: key);
 
   @override
@@ -94,11 +91,11 @@ class CounterA extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            '$counter',
+            '${Provider.of<Counter>(context).counter}',
             style: const TextStyle(fontSize: 48.0),
           ),
           ElevatedButton(
-            onPressed: increment,
+            onPressed: Provider.of<Counter>(context).increment,
             child: const Text(
               'Increment',
               style: TextStyle(fontSize: 20.0),
@@ -111,10 +108,8 @@ class CounterA extends StatelessWidget {
 }
 
 class Middle extends StatelessWidget {
-  final int counter;
   const Middle({
     Key? key,
-    required this.counter,
   }) : super(key: key);
 
   @override
@@ -127,10 +122,10 @@ class Middle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        children: [
-          CounterB(counter: counter),
-          const SizedBox(width: 20.0),
-          const Sibling(),
+        children: const [
+          CounterB(),
+          SizedBox(width: 20.0),
+          Sibling(),
         ],
       ),
     );
@@ -138,10 +133,8 @@ class Middle extends StatelessWidget {
 }
 
 class CounterB extends StatelessWidget {
-  final int counter;
   const CounterB({
     Key? key,
-    required this.counter,
   }) : super(key: key);
 
   @override
@@ -152,7 +145,8 @@ class CounterB extends StatelessWidget {
       color: Colors.yellow[100],
       padding: const EdgeInsets.all(10.0),
       child: Text(
-        '$counter',
+        // '${Provider.of<Counter>(context).counter}',
+        '${context.watch<Counter>().counter}',
         style: const TextStyle(fontSize: 24.0),
       ),
     );
