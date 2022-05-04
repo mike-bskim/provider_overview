@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('MyApp >> build');
 
     return ChangeNotifierProvider<Dog>(
       create: (context) => dog04,
@@ -42,6 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('===================================');
+    debugPrint('MyHomePage >> build >> name');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Provider 04'),
@@ -69,6 +73,8 @@ class BreedAndAge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('BreedAndAge >> build >> breed');
+
     return Column(
       children: [
         Text(
@@ -87,6 +93,8 @@ class Age extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Age >> build >> age');
+
     return Column(
       children: [
         Text(

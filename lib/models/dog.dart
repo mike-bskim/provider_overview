@@ -15,7 +15,6 @@ class Dog with ChangeNotifier{
   void grow() {
     age++;
     notifyListeners();
-    debugPrint('Dog.grow(): ' + age.toString());
   }
 
 }
