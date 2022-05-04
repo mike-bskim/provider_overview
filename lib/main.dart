@@ -152,19 +152,24 @@ class CounterB extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('CounterB >> build');
 
-    return Container(
-      color: Colors.yellow[100],
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          Text(Provider.of<Counter>(context).titleCounterB),
-          Text(
-            // '${Provider.of<Counter>(context).counter}',
-            '${context.watch<Counter>().counter}',
-            style: const TextStyle(fontSize: 24.0),
+    return Consumer(
+      builder: (BuildContext context, Counter cnt, Widget? child) {
+        return Container(
+          color: Colors.yellow[100],
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Text(Provider.of<Counter>(context).titleCounterB),
+              Text(
+                // '${Provider.of<Counter>(context).counter}',
+                // '${context.watch<Counter>().counter}',
+                '${cnt.counter}',
+                style: const TextStyle(fontSize: 24.0),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -176,20 +181,25 @@ class Sibling extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('Sibling >> build');
 
-    return Container(
-      color: Colors.orange[100],
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          // Text(Provider.of<Counter>(context).titleSibling),
-          Text(Provider.of<Counter>(context, listen: false).titleSibling),
-          // Text(context.read<Counter>().titleSibling),
-          const Text(
-            'Sibling',
-            style: TextStyle(fontSize: 24.0),
+    return Consumer<Counter>(
+      builder: (BuildContext context, Counter cnt, Widget? child) {
+        return Container(
+          color: Colors.orange[100],
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              // Text(Provider.of<Counter>(context).titleSibling),
+              // Text(Provider.of<Counter>(context, listen: false).titleSibling),
+              // Text(context.read<Counter>().titleSibling),
+              Text(cnt.titleSibling),
+              const Text(
+                'Sibling',
+                style: TextStyle(fontSize: 24.0),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
