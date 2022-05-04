@@ -9,6 +9,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('-----------------------------------');
+    debugPrint('MyApp >> build');
+
     return MaterialApp(
       title: 'Counter',
       debugShowCheckedModeBanner: false,
@@ -38,6 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('===================================');
+    debugPrint('MyHomePage >> build');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Counter'),
@@ -80,6 +86,8 @@ class CounterA extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('CounterA >> build');
+
     return Container(
       color: Colors.red[100],
       padding: const EdgeInsets.all(20.0),
@@ -111,6 +119,8 @@ class Middle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Middle >> build');
+
     return Container(
       color: Colors.grey[200],
       padding: const EdgeInsets.all(20.0),
@@ -136,6 +146,8 @@ class CounterB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('CounterB >> build');
+
     return Container(
       color: Colors.yellow[100],
       padding: const EdgeInsets.all(10.0),
@@ -152,6 +164,8 @@ class Sibling extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('Sibling >> build');
+
     return Container(
       color: Colors.orange[100],
       padding: const EdgeInsets.all(10.0),
