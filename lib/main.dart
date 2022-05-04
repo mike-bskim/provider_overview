@@ -181,8 +181,9 @@ class Sibling extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('Sibling >> build');
 
-    return Consumer<Counter>(
-      builder: (BuildContext context, Counter cnt, Widget? child) {
+    return Selector<Counter, String>(
+      selector: (context, Counter cnt) => cnt.titleSibling,
+      builder: (BuildContext context, String title, Widget? child) {
         return Container(
           color: Colors.orange[100],
           padding: const EdgeInsets.all(10.0),
@@ -191,7 +192,7 @@ class Sibling extends StatelessWidget {
               // Text(Provider.of<Counter>(context).titleSibling),
               // Text(Provider.of<Counter>(context, listen: false).titleSibling),
               // Text(context.read<Counter>().titleSibling),
-              Text(cnt.titleSibling),
+              Text(title),
               const Text(
                 'Sibling',
                 style: TextStyle(fontSize: 24.0),
