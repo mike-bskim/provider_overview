@@ -152,7 +152,7 @@ class CounterB extends StatelessWidget {
   Widget build(BuildContext context) {
     debugPrint('CounterB >> build');
 
-    return Consumer(
+    return Consumer<Counter>(
       builder: (BuildContext context, Counter cnt, Widget? child) {
         return Container(
           color: Colors.yellow[100],
