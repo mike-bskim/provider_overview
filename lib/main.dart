@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider_overview/models/counter.dart';
 
-import 'models/dog.dart';
+import 'models/counter.dart';
+import 'show_me_counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,22 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Provider 09 master',
+      title: 'Anonymous Route',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: ChangeNotifierProvider<Counter>(
+        create: (context) => Counter(),
+        child: const MyHomePage(),
+      ),
     );
-  }
-}
-
-class Foo with ChangeNotifier {
-  String value = 'Foo';
-
-  void changeValue() {
-    value = value == 'Foo' ? 'Bar' : 'Foo';
-    notifyListeners();
   }
 }
 
@@ -38,47 +32,40 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('_MyHomePageState >> build');
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Provider 09 master'),
-      ),
-      body: ChangeNotifierProvider<Counter>(
-        create: (_) => Counter(),
-        child: const ChildWidget(),
-      ),
-    );
-  }
-}
-
-class ChildWidget extends StatelessWidget {
-  const ChildWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'value: ${context.watch<Counter>().counter}',
-            style: const TextStyle(fontSize: 40.0),
-          ),
-          const SizedBox(height: 20.0),
-          ElevatedButton(
-            onPressed: () {
-              context.read<Counter>().increment();
-            },
-            child: const Text(
-              'Increment',
-              style: TextStyle(fontSize: 20.0),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text(
+                'Show Me Counter',
+                style: TextStyle(fontSize: 20.0),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) {
+                    return ChangeNotifierProvider.value(
+                      value: context.read<Counter>(),
+                      child: const ShowMeCounter(),
+                    );
+                  }),
+                );
+              },
             ),
-          ),
-        ],
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              child: const Text(
+                'Increment Counter',
+                style: TextStyle(fontSize: 20.0),
+              ),
+              onPressed: () {
+                context.read<Counter>().increment();
+              },
+            )
+          ],
+        ),
       ),
     );
   }
