@@ -6,6 +6,7 @@ void main() {
 }
 
 class Counter with ChangeNotifier {
+  String titleMyHomePage = 'MyHomePage';
   String titleCounterA = 'Counter A';
   String titleCounterB = 'Counter B';
   String titleMiddle = 'Middle';
@@ -63,12 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                Text('MyHomePage', style: TextStyle(fontSize: 24.0)),
-                SizedBox(height: 20.0),
-                CounterA(),
-                SizedBox(height: 20.0),
-                Middle(),
+              children: <Widget>[
+                Text(
+                  Provider.of<Counter>(context).titleMyHomePage,
+                  style: const TextStyle(fontSize: 24.0),
+                ),
+                const SizedBox(height: 20.0),
+                const CounterA(),
+                const SizedBox(height: 20.0),
+                const Middle(),
               ],
             ),
           ),
