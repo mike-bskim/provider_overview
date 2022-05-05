@@ -57,25 +57,29 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ChangeNotifierProvider<Counter>(
         create: (context) => Counter(),
-        child: Center(
-          child: Container(
-            color: Colors.grey,
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  Provider.of<Counter>(context).titleMyHomePage,
-                  style: const TextStyle(fontSize: 24.0),
+        child: Builder(
+          builder: (context) {
+            return Center(
+              child: Container(
+                color: Colors.grey,
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      Provider.of<Counter>(context).titleMyHomePage,
+                      style: const TextStyle(fontSize: 24.0),
+                    ),
+                    const SizedBox(height: 20.0),
+                    const CounterA(),
+                    const SizedBox(height: 20.0),
+                    const Middle(),
+                  ],
                 ),
-                const SizedBox(height: 20.0),
-                const CounterA(),
-                const SizedBox(height: 20.0),
-                const Middle(),
-              ],
-            ),
-          ),
+              ),
+            );
+          }
         ),
       ),
     );
