@@ -8,21 +8,47 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final Counter _counter = Counter();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _counter.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    debugPrint('MyApp >> build');
+
     return MaterialApp(
-      title: 'Anonymous Route',
+      title: 'Named Route',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider<Counter>(
-        create: (context) => Counter(),
-        child: const MyHomePage(),
-      ),
+      // home: ChangeNotifierProvider<Counter>(
+      //   create: (context) => Counter(),
+      //   child: const MyHomePage(),
+      // ),
+      routes: {
+        '/': (context) => ChangeNotifierProvider.value(
+              value: _counter,
+              child: const MyHomePage(),
+            ),
+        '/counter': (context) => ChangeNotifierProvider.value(
+              value: _counter,
+              child: const ShowMeCounter(),
+            ),
+      },
     );
   }
 }
@@ -43,14 +69,7 @@ class MyHomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 20.0),
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) {
-                    // ChangeNotifierProvider.value 제거할것.
-                    // push 의 context 와 builder 의 context 충돌. builder 의 context 제거할것.
-                    return const ShowMeCounter();
-                  }),
-                );
+                Navigator.pushNamed(context, '/counter');
               },
             ),
             const SizedBox(height: 20.0),
