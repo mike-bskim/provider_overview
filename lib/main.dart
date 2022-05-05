@@ -45,7 +45,7 @@ class MyHomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) {
+                  MaterialPageRoute(builder: (_) { // 여기서 context 전달하면 안됨.
                     return ChangeNotifierProvider.value(
                       value: context.read<Counter>(),
                       child: const ShowMeCounter(),
