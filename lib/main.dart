@@ -1,74 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'models/counter.dart';
-import 'show_me_counter.dart';
+import 'pages/chgnotiprov_chgnotiproxyprov.dart';
+import 'pages/chgnotiprov_proxyprov.dart';
+import 'pages/proxyprov_create_update.dart';
+import 'pages/proxyprov_proxyprov.dart';
+import 'pages/proxyprov_update.dart';
+import 'pages/why_proxyprov.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final Counter _counter = Counter();
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _counter.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    debugPrint('MyApp >> build');
-
     return MaterialApp(
-      title: 'Named Route',
+      title: 'ProxyProvider Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: ChangeNotifierProvider<Counter>(
-      //   create: (context) => Counter(),
-      //   child: const MyHomePage(),
-      // ),
-      // routes: {
-      //   '/': (context) => ChangeNotifierProvider.value(
-      //         value: _counter,
-      //         child: const MyHomePage(),
-      //       ),
-      //   '/counter': (context) => ChangeNotifierProvider.value(
-      //         value: _counter,
-      //         child: const ShowMeCounter(),
-      //       ),
-      // },
-      onGenerateRoute: (RouteSettings settings) {
-        switch (settings.name) {
-          case '/':
-            return MaterialPageRoute(
-              builder: (context) => ChangeNotifierProvider.value(
-                value: _counter,
-                child: const MyHomePage(),
-              ),
-            );
-          case '/counter':
-            return MaterialPageRoute(
-              builder: (context) => ChangeNotifierProvider.value(
-                value: _counter,
-                child: const ShowMeCounter(),
-              ),
-            );
-          default:
-            return null;
-        }
-      },
+      home: const MyHomePage(),
     );
   }
 }
@@ -78,31 +32,113 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+    debugPrint('${_size.width} ${_size.height}');
+
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              child: const Text(
-                'Show Me Counter',
-                style: TextStyle(fontSize: 20.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0.0, 60.0)),
+                child: const Text(
+                  'Why\nProxyProvider',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const WhyProxyProv(),
+                  ),
+                ),
               ),
-              onPressed: () {
-                Navigator.pushNamed(context, '/counter');
-              },
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              child: const Text(
-                'Increment Counter',
-                style: TextStyle(fontSize: 20.0),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0.0, 60.0)),
+                child: const Text(
+                  'ProxyProvider\nupdate',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ProxyProvUpdate(),
+                  ),
+                ),
               ),
-              onPressed: () {
-                context.read<Counter>().increment();
-              },
-            )
-          ],
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0.0, 60.0)),
+                child: const Text(
+                  'ProxyProvider\ncreate/update',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ProxyProvCreateUpdate(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0.0, 60.0)),
+                child: const Text(
+                  'ProxyProvider\nProxyProvider',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ProxyProvProxyProv(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0.0, 60.0)),
+                child: const Text(
+                  'ChangeNotifierProvider\nChangeNotifierProxyProvider',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ChgNotiProvChgNotiProxyProv(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(0.0, 60.0)),
+                child: const Text(
+                  'ChangeNotifierProvider\nProxyProvider',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const ChgNotiProvProxyProv(),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
