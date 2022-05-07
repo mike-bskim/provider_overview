@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'pages/chgnotiprov_chgnotiproxyprov.dart';
-import 'pages/chgnotiprov_proxyprov.dart';
-import 'pages/proxyprov_create_update.dart';
-import 'pages/proxyprov_proxyprov.dart';
-import 'pages/proxyprov_update.dart';
-import 'pages/why_proxyprov.dart';
+import 'pages/counter_page.dart';
+import 'pages/handle_dialog_page.dart';
+import 'pages/navigate_page.dart';
+import 'models/counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,13 +15,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ProxyProvider Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider<Counter>(
+      create: (_) => Counter(),
+      child: MaterialApp(
+        title: 'addPostFrameCallback',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
@@ -32,9 +34,6 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size _size = MediaQuery.of(context).size;
-    debugPrint('${_size.width} ${_size.height}');
-
     return Scaffold(
       body: Center(
         child: Padding(
@@ -43,97 +42,40 @@ class MyHomePage extends StatelessWidget {
             shrinkWrap: true,
             children: [
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 60.0)),
                 child: const Text(
-                  'Why\nProxyProvider',
+                  'Counter Page',
                   style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
                 ),
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const WhyProxyProv(),
+                    builder: (_) => const CounterPage(),
                   ),
                 ),
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 60.0)),
                 child: const Text(
-                  'ProxyProvider\nupdate',
+                  'Handle Dialog Page',
                   style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
                 ),
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const ProxyProvUpdate(),
+                    builder: (_) => const HandleDialogPage(),
                   ),
                 ),
               ),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 60.0)),
                 child: const Text(
-                  'ProxyProvider\ncreate/update',
+                  'Navigate Page',
                   style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
                 ),
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const ProxyProvCreateUpdate(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 60.0)),
-                child: const Text(
-                  'ProxyProvider\nProxyProvider',
-                  style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ProxyProvProxyProv(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 60.0)),
-                child: const Text(
-                  'ChangeNotifierProvider\nChangeNotifierProxyProvider',
-                  style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ChgNotiProvChgNotiProxyProv(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(0.0, 60.0)),
-                child: const Text(
-                  'ChangeNotifierProvider\nProxyProvider',
-                  style: TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ChgNotiProvProxyProv(),
+                    builder: (_) => const NavigatePage(),
                   ),
                 ),
               ),
