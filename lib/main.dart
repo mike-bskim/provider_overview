@@ -38,39 +38,40 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   String? searchTerm;
-  // late final AppProvider appProv;
+  late final AppProvider appProv;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   appProv = context.read<AppProvider>();
-  //   appProv.addListener(appListener);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    appProv = context.read<AppProvider>();
+    appProv.addListener(appListener);
+  }
 
-  // void appListener() {
-  //   if (appProv.state == AppState.success) {
-  //     Navigator.push(context, MaterialPageRoute(
-  //       builder: (context) {
-  //         return const SuccessPage();
-  //       },
-  //     ));
-  //   } else if (appProv.state == AppState.error) {
-  //     showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return const AlertDialog(
-  //           content: Text('Something went wrong'),
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
+  // appListener 에서 상태를 체크해야해서, appProv 객체를 만들어야 한다
+  void appListener() {
+    if (appProv.state == AppState.success) {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return const SuccessPage();
+        },
+      ));
+    } else if (appProv.state == AppState.error) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Text('Something went wrong'),
+          );
+        },
+      );
+    }
+  }
 
-  // @override
-  // void dispose() {
-  //   appProv.removeListener(appListener);
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    appProv.removeListener(appListener);
+    super.dispose();
+  }
 
   void submit() {
     setState(() {
@@ -84,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     form.save();
 
-    var result = context.read<AppProvider>().getResult(searchTerm!);
+    context.read<AppProvider>().getResult(searchTerm!);
     // Navigator.push(context, MaterialPageRoute(
     //   builder: (context) {
     //     return const SuccessPage();
@@ -105,26 +106,26 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>().state;
 
-    if (appState == AppState.success) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return const SuccessPage();
-          },
-        ));
-      });
-    } else if (appState == AppState.error) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return const AlertDialog(
-              content: Text('Something went wrong'),
-            );
-          },
-        );
-      });
-    }
+    // if (appState == AppState.success) {
+    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //     Navigator.push(context, MaterialPageRoute(
+    //       builder: (context) {
+    //         return const SuccessPage();
+    //       },
+    //     ));
+    //   });
+    // } else if (appState == AppState.error) {
+    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return const AlertDialog(
+    //           content: Text('Something went wrong'),
+    //         );
+    //       },
+    //     );
+    //   });
+    // }
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),

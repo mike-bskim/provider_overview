@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider_overview/success_page.dart';
 
 enum AppState {
   initial,
@@ -27,7 +28,7 @@ class AppProvider with ChangeNotifier {
       notifyListeners();
       // Navigator.push(context, MaterialPageRoute(
       //   builder: (context) {
-      //     return SuccessPage();
+      //     return const SuccessPage();
       //   },
       // ));
     } catch (e) {
@@ -37,7 +38,7 @@ class AppProvider with ChangeNotifier {
       // showDialog(
       //   context: context,
       //   builder: (context) {
-      //     return AlertDialog(
+      //     return const AlertDialog(
       //       content: Text('Something went wrong'),
       //     );
       //   },
