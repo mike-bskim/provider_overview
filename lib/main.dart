@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'models/dog.dart';
+import 'app_provider.dart';
+import 'success_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,13 +13,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Provider 03',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider<AppProvider>(
+      create: (_) => AppProvider(),
+      child: MaterialApp(
+        title: 'addListener of ChangeNotifier',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
@@ -31,95 +35,145 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final dog = Dog(name: 'dog03', breed: 'breed03');
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  String? searchTerm;
+  // late final AppProvider appProv;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    dog.addListener(dogListener);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   appProv = context.read<AppProvider>();
+  //   appProv.addListener(appListener);
+  // }
 
-  void dogListener() {
-    debugPrint('age Listener(): ${dog.age}');
-    setState(() {});
-  }
+  // void appListener() {
+  //   if (appProv.state == AppState.success) {
+  //     Navigator.push(context, MaterialPageRoute(
+  //       builder: (context) {
+  //         return const SuccessPage();
+  //       },
+  //     ));
+  //   } else if (appProv.state == AppState.error) {
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return const AlertDialog(
+  //           content: Text('Something went wrong'),
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    dog.removeListener(dogListener);
+  // @override
+  // void dispose() {
+  //   appProv.removeListener(appListener);
+  //   super.dispose();
+  // }
+
+  void submit() async {
+    setState(() {
+      // 폼이 summit 된후, 모든 폼 입력에 대해서 항상 validation 확인
+      autovalidateMode = AutovalidateMode.always;
+    });
+
+    final form = formKey.currentState;
+
+    if (form == null || !form.validate()) return;
+
+    form.save();
+
+    try {
+      var result = await context.read<AppProvider>().getResult(searchTerm!);
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return const SuccessPage();
+        },
+      ));
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Text('Something went wrong'),
+          );
+        },
+      );
+    }
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Provider 03'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '- name: ${dog.name}',
-              style: const TextStyle(fontSize: 20.0),
+    final appState = context.watch<AppProvider>().state;
+
+    // if (appState == AppState.success) {
+    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //     Navigator.push(context, MaterialPageRoute(
+    //       builder: (context) {
+    //         return SuccessPage();
+    //       },
+    //     ));
+    //   });
+    // } else if (appState == AppState.error) {
+    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return AlertDialog(
+    //           content: Text('Something went wrong'),
+    //         );
+    //       },
+    //     );
+    //   });
+    // }
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Form(
+              key: formKey,
+              autovalidateMode: autovalidateMode,
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  TextFormField(
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      label: Text('Search'),
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                    validator: (String? value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Search term required';
+                      }
+                      return null;
+                    },
+                    onSaved: (String? value) {
+                      searchTerm = value;
+                    },
+                  ),
+                  const SizedBox(height: 20.0),
+                  ElevatedButton(
+                    child: Text(
+                      appState == AppState.loading
+                          ? 'Loading...'
+                          : 'Get Result',
+                      style: const TextStyle(fontSize: 24.0),
+                    ),
+                    onPressed: appState == AppState.loading ? null : submit,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 10.0),
-            BreedAndAge(
-              dog: dog,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BreedAndAge extends StatelessWidget {
-  final Dog dog;
-
-  const BreedAndAge({Key? key, required this.dog}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          '- breed: ${dog.breed}',
-          style: const TextStyle(fontSize: 20.0),
-        ),
-        const SizedBox(height: 10.0),
-        Age(dog: dog),
-      ],
-    );
-  }
-}
-
-class Age extends StatelessWidget {
-  final Dog dog;
-
-  const Age({Key? key, required this.dog}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          '- age: ${dog.age}',
-          style: const TextStyle(fontSize: 20.0),
-        ),
-        const SizedBox(height: 20.0),
-        ElevatedButton(
-          onPressed: () => dog.grow(),
-          child: const Text(
-            'Grow',
-            style: TextStyle(fontSize: 20.0),
           ),
         ),
-      ],
+      ),
     );
   }
 }
