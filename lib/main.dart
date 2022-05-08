@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //   super.dispose();
   // }
 
-  void submit() async {
+  void submit() {
     setState(() {
       // 폼이 summit 된후, 모든 폼 입력에 대해서 항상 validation 확인
       autovalidateMode = AutovalidateMode.always;
@@ -84,23 +84,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
     form.save();
 
-    try {
-      var result = await context.read<AppProvider>().getResult(searchTerm!);
-      Navigator.push(context, MaterialPageRoute(
-        builder: (context) {
-          return const SuccessPage();
-        },
-      ));
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            content: Text('Something went wrong'),
-          );
-        },
-      );
-    }
+    var result = context.read<AppProvider>().getResult(searchTerm!);
+    // Navigator.push(context, MaterialPageRoute(
+    //   builder: (context) {
+    //     return const SuccessPage();
+    //   },
+    // ));
+    // showDialog(
+    //   context: context,
+    //   builder: (context) {
+    //     return const AlertDialog(
+    //       content: Text('Something went wrong'),
+    //     );
+    //   },
+    // );
 
   }
 
@@ -108,26 +105,26 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>().state;
 
-    // if (appState == AppState.success) {
-    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //     Navigator.push(context, MaterialPageRoute(
-    //       builder: (context) {
-    //         return SuccessPage();
-    //       },
-    //     ));
-    //   });
-    // } else if (appState == AppState.error) {
-    //   WidgetsBinding.instance!.addPostFrameCallback((_) {
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) {
-    //         return AlertDialog(
-    //           content: Text('Something went wrong'),
-    //         );
-    //       },
-    //     );
-    //   });
-    // }
+    if (appState == AppState.success) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return const SuccessPage();
+          },
+        ));
+      });
+    } else if (appState == AppState.error) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text('Something went wrong'),
+            );
+          },
+        );
+      });
+    }
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),

@@ -33,7 +33,7 @@ class AppProvider with ChangeNotifier {
     } catch (e) {
       _state = AppState.error;
       notifyListeners();
-      rethrow; // 이걸 한번더 해줘야 호출한 main.dart 에서도 catch 문이 동작함.
+      // rethrow; // 이걸 한번더 해줘야 호출한 main.dart 에서도 catch 문이 동작함.
       // showDialog(
       //   context: context,
       //   builder: (context) {
